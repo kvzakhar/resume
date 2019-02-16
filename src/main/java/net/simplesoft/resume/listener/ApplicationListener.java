@@ -20,5 +20,4 @@ public class ApplicationListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent sce) {
 		LOGGER.info("Application stopped");
 	}
-
 }

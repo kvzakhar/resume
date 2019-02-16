@@ -44,5 +44,4 @@ public class SearchController extends HttpServlet {
 		request.setAttribute("name", result);
 		request.getRequestDispatcher("/WEB-INF/JSP/search-result.jsp").forward(request, response);
 	}
-
 }
