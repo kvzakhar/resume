@@ -1,4 +1,4 @@
-package ner.simplesoft.resume.testenv;
+package net.simplesoft.resume.testenv;
 
 import java.io.File;
 import java.io.IOException;
