@@ -3,7 +3,7 @@
 <div class="panel panel-primary">
 	<a href="/edit"><img class="img-responsive photo" src="/media/avatar/2ba8918d-79f8-444d-a248-a87e9dbec59c.jpg" alt="photo"></a>
 	<h1 class="text-center">
-		<a style="color: black;" href="/edit">${name != null ? name : 'Richard Hendricks' }</a>
+		<a style="color: black;" href="/edit">${fullName}</a>
 	</h1>
 	<h6 class="text-center">
 		<strong>Voronezh, Russia</strong>

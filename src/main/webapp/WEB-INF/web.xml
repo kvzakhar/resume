@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-	<session-config>
+<!-- 	<session-config>
 		<tracking-mode>COOKIE</tracking-mode>
 	</session-config>
 
@@ -15,5 +15,6 @@
 	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
+<!-- 	config moved to ResumeWebApplicationInitializer -->
 </web-app>
