@@ -17,6 +17,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import net.simplesoft.resume.filter.ApplicationFilter;
+import net.simplesoft.resume.filter.ResumeFilter;
 import net.simplesoft.resume.listener.ApplicationListener;
 
 public class ResumeWebApplicationInitializer implements WebApplicationInitializer {
@@ -42,8 +43,8 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	}
 
 	private void registerFilters(ServletContext container, WebApplicationContext ctx) {
+		registerFilter(container, ctx.getBean(ResumeFilter.class));
 		registerFilter(container, new CharacterEncodingFilter("UTF-8", true));
-		registerFilter(container, ctx.getBean(ApplicationFilter.class));
 		registerFilter(container, buildConfigurableSiteMeshFilter(), "sitemesh");
 	}
 
