@@ -96,8 +96,6 @@ public class PublicDataController {
 
 	@RequestMapping(value = "/restore/{token}", method = RequestMethod.GET)
 	public String restoreAccess(@PathVariable("token") String token) {
-		Profile profile = findProfileService.findByRestoreToken(token);
-		SecurityUtil.authentificate(profile);
 		return "redirect:/edit/password";
 	}
 }

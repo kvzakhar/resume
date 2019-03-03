@@ -2,6 +2,8 @@ package net.simplesoft.resume.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.simplesoft.resume.repository.storage.SkillCategoryRepository;
+
 @Controller
-public class EditProfileController {
+public class EditProfileController {	
+
+	private SkillCategoryRepository skillCategoryRepository;
+	
+	@Autowired
+	public EditProfileController(SkillCategoryRepository skillCategoryRepository) {
+		this.skillCategoryRepository = skillCategoryRepository;
+	}
 
 	@GetMapping(value = "/edit")
 	public String getEditProfile(Model model) {
@@ -37,7 +48,9 @@ public class EditProfileController {
 
 	@GetMapping(value = "/edit/skills")
 	public String getEditTechSkills(Model model) {
-		return gotoSkillsJSP(model);
+		model.addAttribute("skillCategories", this.skillCategoryRepository.findAll(new Sort("id")));
+		return "edit/skills";
+		//return gotoSkillsJSP(model);
 	}
 
 	@PostMapping(value = "/edit/skills")

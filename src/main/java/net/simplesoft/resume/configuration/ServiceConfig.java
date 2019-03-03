@@ -10,11 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Configuration
-@ComponentScan({ 
-	 "net.simplesoft.resume.service.impl", 
-	 "net.simplesoft.resume.controller",
-	 "net.simplesoft.resume.filter", 
-	 "net.simplesoft.resume.listener"})
+@ComponentScan({"net.simplesoft.resume.service.impl",
+				"net.simplesoft.resume.listener",
+				"net.simplesoft.resume.filter"})
 public class ServiceConfig {
 
 	@Bean

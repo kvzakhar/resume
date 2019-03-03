@@ -16,7 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
-import net.simplesoft.resume.filter.ApplicationFilter;
 import net.simplesoft.resume.filter.ResumeFilter;
 import net.simplesoft.resume.listener.ApplicationListener;
 
