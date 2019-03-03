@@ -23,14 +23,18 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
+		
+		container.setInitParameter("spring.profiles.active", "heroku");
+		
 		WebApplicationContext ctx = createWebApplicationContext(container);
-
+		
 		container.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
 		container.addListener(new ContextLoaderListener(ctx));
 		container.addListener(ctx.getBean(ApplicationListener.class));
 
 		registerFilters(container, ctx);
-		registerSpringMVCDispatcherServlet(container, ctx);
+		registerSpringMVCDispatcherServlet(container, ctx);		
+		 
 	}
 	
 	private WebApplicationContext createWebApplicationContext(ServletContext container) {
