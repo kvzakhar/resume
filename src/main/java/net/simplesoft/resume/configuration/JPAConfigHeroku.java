@@ -25,22 +25,30 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("net.simplesoft.resume.repository.storage")
 @EnableTransactionManagement
-@Profile("local")
-public class JPAConfig {
+@Profile("heroku")
+public class JPAConfigHeroku {
 	
 	@Autowired
 	Environment environment;
 	
 	@Bean
 	public DataSource dataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName(environment.getRequiredProperty("db.driver"));
-		dataSource.setUrl(environment.getRequiredProperty("db.url"));
-		dataSource.setUsername(environment.getRequiredProperty("db.username"));
-		dataSource.setPassword(environment.getRequiredProperty("db.password"));
-		dataSource.setInitialSize(Integer.parseInt(environment.getRequiredProperty("db.pool.initSize")));
-		dataSource.setMaxTotal(Integer.parseInt(environment.getRequiredProperty("db.pool.maxSize")));
-		return dataSource;
+		try {
+		    URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+	        String username = dbUri.getUserInfo().split(":")[0];
+	        String password = dbUri.getUserInfo().split(":")[1];
+	        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+
+	        BasicDataSource basicDataSource = new BasicDataSource();
+	        basicDataSource.setUrl(dbUrl);
+	        basicDataSource.setUsername(username);
+	        basicDataSource.setPassword(password);
+
+	        return basicDataSource;
+		} catch (Exception e) {
+			throw new BeanCreationException("dataSourceHeroku", "Failed to create a dataSourceHeroku", e);
+		}
 	}
 	
 	private Properties hibernateProperties() {
