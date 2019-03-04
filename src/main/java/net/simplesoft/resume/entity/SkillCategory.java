@@ -1,5 +1,7 @@
 package net.simplesoft.resume.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,4 +37,21 @@ public class SkillCategory extends AbstractEntity<Long> {
 		this.category = category;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, category);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof SkillCategory))
+			return false;
+		SkillCategory other = (SkillCategory) obj;
+		
+		return Objects.equals(id, other.id) 
+				&& Objects.equals(category, other.category);
+	}
+	
 }
