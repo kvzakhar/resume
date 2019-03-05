@@ -25,7 +25,7 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
 		
-		container.setInitParameter("spring.profiles.active", "local");
+		container.setInitParameter("spring.profiles.active", "heroku");
 		
 		WebApplicationContext ctx = createWebApplicationContext(container);
 		
