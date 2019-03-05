@@ -89,7 +89,7 @@ public class Hobby extends AbstractEntity<Long> implements Comparable<Hobby>, Pr
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class Hobby extends AbstractEntity<Long> implements Comparable<Hobby>, Pr
 		if (!(obj instanceof Hobby))
 			return false;
 		Hobby other = (Hobby) obj;
-		return Objects.equals(id, other.id) && Objects.equals(name, other.name);
+		return Objects.equals(name, other.name);
 	}
 	
 	@Override

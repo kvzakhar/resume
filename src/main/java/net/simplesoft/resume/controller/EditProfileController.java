@@ -8,22 +8,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.simplesoft.resume.form.SkillForm;
+import net.simplesoft.resume.repository.storage.ProfileRepository;
 import net.simplesoft.resume.repository.storage.SkillCategoryRepository;
 
 @Controller
 public class EditProfileController {	
 
 	private SkillCategoryRepository skillCategoryRepository;
+	private ProfileRepository profileRepository;
 	
 	@Autowired
-	public EditProfileController(SkillCategoryRepository skillCategoryRepository) {
+	public EditProfileController(SkillCategoryRepository skillCategoryRepository, ProfileRepository profileRepository) {
 		this.skillCategoryRepository = skillCategoryRepository;
+		this.profileRepository = profileRepository;
 	}
 
 	@GetMapping(value = "/edit")
@@ -48,17 +53,20 @@ public class EditProfileController {
 
 	@GetMapping(value = "/edit/skills")
 	public String getEditTechSkills(Model model) {
-		model.addAttribute("skillCategories", this.skillCategoryRepository.findAll(new Sort("id")));
-		return "edit/skills";
-		//return gotoSkillsJSP(model);
-	}
-
-	@PostMapping(value = "/edit/skills")
-	public String saveEditTechSkills(Model model) {
+		model.addAttribute("skillForm", new SkillForm(profileRepository.findOne(1L).getSkills()));
 		return gotoSkillsJSP(model);
 	}
 
+	@PostMapping(value = "/edit/skills")
+	public String saveEditTechSkills(@ModelAttribute("skillForm") SkillForm form, BindingResult bindingResult, Model model) {
+		if(!bindingResult.hasErrors()) {
+			return gotoSkillsJSP(model);
+		}
+		return "redirect:/mike-ross";
+	}
+
 	private String gotoSkillsJSP(Model model) {
+		model.addAttribute("skillCategories", skillCategoryRepository.findAll(new Sort("id")));
 		return "edit/skills";
 	}
 

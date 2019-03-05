@@ -5,7 +5,12 @@ import java.awt.print.Pageable;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
@@ -18,29 +23,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import net.simplesoft.resume.entity.Profile;
+import net.simplesoft.resume.repository.storage.ProfileRepository;
 import net.simplesoft.resume.service.NameService;
 
 @Controller
 public class PublicDataController {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(PublicDataController.class);
+	
+	private final ProfileRepository profileRepository;
+	
 	@Autowired
-	private NameService nameService;
+	public PublicDataController(ProfileRepository profileRepository) {
+		this.profileRepository = profileRepository;
+	}
 
-	@RequestMapping(value="/{uid}", method=RequestMethod.GET)
+	@GetMapping(value="/{uid}")
 	public String getProfile(@PathVariable("uid") String uid, Model model){
-		String fullName = nameService.convertName(uid);
-		model.addAttribute("fullName", fullName);
+		Profile profile = profileRepository.findByUid(uid);
+		if(profile == null) {
+			return "profile-not-found";
+		}
+		LOGGER.info("PF " + profile.getLargePhoto());
+		model.addAttribute("profile", profile);
 		return "profile";
 	}
 	
-	@RequestMapping(value="/error", method=RequestMethod.GET)
+	@GetMapping(value="/error")
 	public String getError(){
 		return "error";
 	}
 	
 	
 	@GetMapping(value="/welcome")
-	public String welcome(Model model) {		
+	public String listAll(Model model) {		
+		Page<Profile> profiles = profileRepository.findAll(new PageRequest(0, 10, new Sort("id")));
+		LOGGER.info("Found " + profiles.getContent().size());
+		model.addAttribute("profiles", profiles.getContent());
+		model.addAttribute("page", profiles);		
 		return "welcome";		
 	}
 

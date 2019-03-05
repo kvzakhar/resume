@@ -17,7 +17,8 @@ public class ProfileRestore extends AbstractEntity<Long> {
 	@Column(unique = true, nullable = false)
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.LAZY, optional=false)
+	//One-To-One in Hibernate doesn't support lazy by default need to set optional to false
+	@OneToOne(fetch=FetchType.LAZY, optional = false)
 	@JoinColumn(name="id", nullable=false)
 	private Profile profile;
 
