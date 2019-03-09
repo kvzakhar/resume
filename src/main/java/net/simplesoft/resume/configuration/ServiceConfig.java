@@ -24,7 +24,7 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public PropertySourcesPlaceholderConfigurer placeHolderConfigurer() throws IOException{
+	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() throws IOException{
 		PropertySourcesPlaceholderConfigurer bean = new PropertySourcesPlaceholderConfigurer();
 		bean.setLocations(getResources());
 		return bean;
