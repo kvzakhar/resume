@@ -22,7 +22,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource("classpath:properties/application.properties")
+@PropertySource("classpath:/properties/application.properties")
 @EnableJpaRepositories("net.simplesoft.resume.repository.storage")
 @EnableTransactionManagement
 @Profile("heroku")
