@@ -1,12 +1,12 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="resume" tagdir="/WEB-INF/tags"%>
 
 <div class="container">
 	<div class="row">
 		<div class="col-md-4 col-sm-6">
-			<resume:profile-main />
+			<resume:profile-main profile="${profile}" showEdit="${true}"/>
 			<div class="hidden-xs">
 				<c:if test="${fn:length(profile.languages) > 0}">
 					<resume:profile-languages languages="${profile.languages}" showEdit="${true }" />
@@ -45,7 +45,7 @@
 				<resume:profile-hobbies hobbies="${profile.hobbies }" showEdit="${true }" />
 			</c:if>
 			<c:if test="${profile.info != null}">
-				<resume:profile-info profile="${profile }" showEdit="${true }"/>
+				<resume:profile-info profile="${profile}" showEdit="${true }"/>
 			</c:if>
 		</div>
 	</div>

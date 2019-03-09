@@ -23,7 +23,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:properties/application.properties")
 @EnableJpaRepositories("net.simplesoft.resume.repository.storage")
 @EnableTransactionManagement
 @Profile("local")
@@ -47,6 +47,7 @@ public class JPAConfig {
 	private Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+		properties.put("hibernate.show_sql", true);
 		properties.put("javax.persistence.validation.mode", "none");
 		return properties;
 	}

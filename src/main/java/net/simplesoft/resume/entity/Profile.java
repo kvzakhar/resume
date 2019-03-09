@@ -3,6 +3,7 @@ package net.simplesoft.resume.entity;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,12 +17,25 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import net.simplesoft.resume.annotation.constraints.Adulthood;
+import net.simplesoft.resume.annotation.constraints.EnglishLanguage;
+import net.simplesoft.resume.annotation.constraints.Phone;
 
 @Entity
 @Table(name = "profile")
+//@Document(indexName="profile")
 public class Profile extends AbstractEntity<Long>{
 
 	private static final long serialVersionUID = -1011495888866727912L;
@@ -33,12 +47,26 @@ public class Profile extends AbstractEntity<Long>{
 	private Long id;
 
 	@Column(name = "birth_day")
+	@Adulthood
 	private Date birthDay;
+	
+	@Version
+	@Column(name="optlock")
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
+	private int versionNum;	
 
 	@Column
+	@Size(max=100)
+	@NotNull
+	@SafeHtml
+	@EnglishLanguage(withNumbers=false, withSpechSymbols=false)
 	private String city;
 
 	@Column
+	@Size(max=60)
+	@NotNull
+	@SafeHtml
+	@EnglishLanguage(withNumbers=false, withSpechSymbols=false)
 	private String country;
 
 	@Column(name = "first_name", nullable = false, length = 50)
@@ -48,58 +76,81 @@ public class Profile extends AbstractEntity<Long>{
 	private String lastName;
 
 	@Column(length = 2147483647)
+	@NotNull
+	@SafeHtml
+	@EnglishLanguage
 	private String objective;
 
+	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	@Column(name = "large_photo", length = 255)
 	private String largePhoto;
 
 	@Column(name = "small_photo", length = 255)
 	private String smallPhoto;
 
-	@Column(length = 20)
+	@Size(min = 9, max=20)
+	@Phone
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private String phone;
 
-	@Column(length = 100)
+	@Column
+	@NotNull
+	@Size(max=100)
+	@Email
+	@EnglishLanguage
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private String email;
 	
 	@Column
 	private String info;
 
 	@Column(length = 2147483647)
+	@NotNull
+	@SafeHtml
+	@EnglishLanguage
 	private String summary;
 
 	@Column(nullable = false, length = 100)
 	private String uid;
 	
 	@Column(nullable = false, length = 100)
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private String password;
 	
+	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	@Column(nullable = false)
 	private boolean completed;
 	
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	@Column(insertable=false)
 	private Timestamp created;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Certificate> certificates;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishYear DESC, beginYear DESC, id DESC")
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Education> educations;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("name ASC")
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Hobby> hobbies;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
+	//@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Language> languages;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishDate DESC")
+	//@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Practic> practics;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("id ASC")
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private List<Skill> skills;
 	
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
@@ -120,6 +171,10 @@ public class Profile extends AbstractEntity<Long>{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public int getVersionNum() { 
+		return versionNum; 
+	}	
 
 	public Date getBirthDay() {
 		return this.birthDay;
@@ -231,6 +286,13 @@ public class Profile extends AbstractEntity<Long>{
 
 	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
+		updateListSetProfile(this.skills);		
+	}
+
+	private void updateListSetProfile(List<? extends ProfileEntity> list) {
+		if(list != null) {
+			list.forEach(s->{s.setProfile(this);});
+		}
 	}
 
 	public List<Course> getCourses() {

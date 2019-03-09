@@ -25,7 +25,7 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
 		
-		container.setInitParameter("spring.profiles.active", "heroku" );
+		container.setInitParameter("spring.profiles.active", "local" );
 		
 		WebApplicationContext ctx = createWebApplicationContext(container);
 		
@@ -69,7 +69,8 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 			@Override
 			protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
 				builder
-					.addDecoratorPath("/*", "/WEB-INF/template/page-template.jsp");
+					.addDecoratorPath("/*", "/WEB-INF/template/page-template.jsp")
+					.addDecoratorPath("/fragment/*",  "/WEB-INF/template/fragment-template.jsp");
 			}
 		};
 	}

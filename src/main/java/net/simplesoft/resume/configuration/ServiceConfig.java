@@ -2,6 +2,7 @@ package net.simplesoft.resume.configuration;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,13 @@ import org.springframework.core.io.Resource;
 				"net.simplesoft.resume.listener",
 				"net.simplesoft.resume.filter"})
 public class ServiceConfig {
+	
+	@Bean
+	public PropertiesFactoryBean properties(){
+		PropertiesFactoryBean properties = new PropertiesFactoryBean();
+		properties.setLocations(new ClassPathResource("logic.properties"));
+		return properties;
+	}
 
 	@Bean
 	public PropertySourcesPlaceholderConfigurer placeHolderConfigurer() throws IOException{
@@ -23,6 +31,8 @@ public class ServiceConfig {
 	}
 	
 	private static Resource[] getResources(){
-		return new Resource[] {new ClassPathResource("application.properties")};
+		return new Resource[] {
+				new ClassPathResource("logic.properties"), 
+				new ClassPathResource("properties/application.properties")};
 	}
 }

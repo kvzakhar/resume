@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="course")
 public class Course extends AbstractFinishDateEntity<Long> implements Serializable, ProfileEntity {
@@ -34,6 +36,7 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_profile", referencedColumnName = "id",  nullable = false)
+//	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	Profile profile;
 	
 	public Course(){}

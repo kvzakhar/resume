@@ -29,15 +29,21 @@ public class ResumeFilter extends AbstractFilter {
 		
 	}
 	
-	private void handleException(Throwable th, String requestUrl, HttpServletResponse resp) throws ServletException, IOException {
+	private void handleException(Throwable th, String requestUrl, HttpServletResponse response) throws ServletException, IOException {
 		if(production) {
-			if ("/error".equals(requestUrl)) {
-				throw new ServletException(th);
+			if (requestUrl.startsWith("/fragment") || "/error".equals(requestUrl)) {
+				sendErrorStatus(response);
 			} else {
-				resp.sendRedirect("/error?url="+requestUrl);
+				response.sendRedirect("/error?url="+requestUrl);
 			}
 		} else {
 			throw new ServletException(th);
 		}
+	}
+	
+	private void sendErrorStatus(HttpServletResponse response) throws IOException{
+		response.reset();
+		response.getWriter().write("");
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
 }

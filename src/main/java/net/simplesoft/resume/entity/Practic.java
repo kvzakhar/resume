@@ -14,11 +14,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.joda.time.DateTime;
 
+import net.simplesoft.resume.annotation.constraints.FirstFieldLessThanSecond;
+
 @Entity
 @Table(name = "practic")
+@FirstFieldLessThanSecond(first="beginDate", second="finishDate", message="date before should be before date after")
 public class Practic extends AbstractFinishDateEntity<Long> implements ProfileEntity{
 	private static final long serialVersionUID = 1L;
 
@@ -38,9 +42,11 @@ public class Practic extends AbstractFinishDateEntity<Long> implements ProfileEn
 	private String src;
 
 	@Column(nullable = false, length = 100)
+	@NotNull
 	private String position;
 
 	@Column(nullable = false, length = 2147483647)
+	@NotNull
 	private String responsibilities;
 
 	@Column(name = "begin_date", nullable = false)

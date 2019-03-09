@@ -8,8 +8,8 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">
 			<i class="fa fa-heart"></i> Hobbi
-			<c:if test="${showEdit }">
-				<a href="/edit/hobby" class="edit-block">Edit</a>
+			<c:if test="${showEdit}">
+				<a href="/edit/hobbies" class="edit-block">Edit</a>
 			</c:if>
 		</h3>
 	</div>
