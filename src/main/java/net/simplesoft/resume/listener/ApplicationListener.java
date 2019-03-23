@@ -19,11 +19,11 @@ public class ApplicationListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		sce.getServletContext().setAttribute("production", production);
-		LOGGER.info("Application started");
+		LOGGER.info("Application started!");
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		LOGGER.info("Application stopped");
+		LOGGER.info("Application stopped!");
 	}
 }
