@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" 		uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form"   	uri="http://www.springframework.org/tags/form"%>
-<%-- <%@ taglib prefix="sec" 	uri="http://www.springframework.org/security/tags" %> --%>
+<%@ taglib prefix="sec" 	uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="resume" 	tagdir="/WEB-INF/tags"%>
 
 <div class="panel panel-info small-center-block">
@@ -13,11 +13,10 @@
 	<div class="panel-body">
 		<resume:form-display-error-if-invalid formName="profileForm" />
 		<form:form action="/sign-up" modelAttribute="profileForm" method="post">
-<%-- 			<sec:csrfInput/> --%>
+ 			<sec:csrfInput/>
 			<div class="help-block text-justify">
 				Имейте ввиду, что введенные Вами имя и фамилия не смогут быть изменены в будущем! Поэтому предоставляйте реальные имя и фамилию! 
-			</div>
-			
+			</div>			
 			<resume:form-has-error path="firstName"/>
 			<div class="form-group ${hasError ? 'has-error has-feedback' : ''}">
 				<label for="firstName">Имя</label> 

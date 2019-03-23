@@ -14,8 +14,11 @@ import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import net.simplesoft.resume.filter.ResumeFilter;
 import net.simplesoft.resume.listener.ApplicationListener;
@@ -25,7 +28,7 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
 		
-		container.setInitParameter("spring.profiles.active", "heroku" );
+		container.setInitParameter("spring.profiles.active", "local" );
 		
 		WebApplicationContext ctx = createWebApplicationContext(container);
 		
@@ -49,7 +52,11 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	private void registerFilters(ServletContext container, WebApplicationContext ctx) {
 		registerFilter(container, ctx.getBean(ResumeFilter.class));
 		registerFilter(container, new CharacterEncodingFilter("UTF-8", true));
-		registerFilter(container, new OpenEntityManagerInViewFilter());
+	//	registerFilter(container, new OpenEntityManagerInViewFilter());
+		//security
+		registerFilter(container, new RequestContextFilter());
+		registerFilter(container, new DelegatingFilterProxy("springSecurityFilterChain"), "springSecurityFilterChain");
+		
 		registerFilter(container, buildConfigurableSiteMeshFilter(), "sitemesh");
 	}
 

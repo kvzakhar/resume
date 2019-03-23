@@ -22,7 +22,7 @@ public class FindProfileServiceImpl implements FindProfileService{
 
 	@Override
 	public Profile findByUid(String uid) {
-		return profileRepository.findByUid(uid);
+		return profileRepository.selectProfileWithJoins(uid);
 	}
 
 	@Override

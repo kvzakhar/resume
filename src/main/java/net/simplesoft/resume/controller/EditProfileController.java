@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.engine.transaction.jta.platform.internal.BitronixJtaPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.simplesoft.resume.entity.Contacts;
-
+import net.simplesoft.resume.entity.Course;
 import net.simplesoft.resume.entity.Profile;
+import net.simplesoft.resume.exception.FormValidationException;
 import net.simplesoft.resume.form.CertificateForm;
 import net.simplesoft.resume.form.CourseForm;
 import net.simplesoft.resume.form.EducationForm;
@@ -28,6 +31,7 @@ import net.simplesoft.resume.form.InfoForm;
 import net.simplesoft.resume.form.LanguageForm;
 import net.simplesoft.resume.form.PracticForm;
 import net.simplesoft.resume.form.SkillForm;
+import net.simplesoft.resume.model.CurrentProfile;
 import net.simplesoft.resume.service.EditProfileService;
 import net.simplesoft.resume.service.StaticDataService;
 import net.simplesoft.resume.util.SecurityUtil;
@@ -47,7 +51,7 @@ public class EditProfileController {
 	}
 
 	@GetMapping(value = "/edit")
-	public String getEditProfile(Model model) {
+	public String getEditProfile(Model model) {		
 		model.addAttribute("profileForm", editProfileService.findById(SecurityUtil.getCurrentIdProfile()));
 		return "edit/profile";
 	}
@@ -57,9 +61,15 @@ public class EditProfileController {
 			@RequestParam("profilePhoto") MultipartFile uploadPhoto) {
 		if(bindingResult.hasErrors()) {
 			return "edit/profile";
+		} else {
+			try {
+				editProfileService.updateProfileData(SecurityUtil.getCurrentProfile(), profileForm, uploadPhoto);
+				return "redirect:/edit/contacts";
+			} catch (FormValidationException e) {
+				bindingResult.addError(e.buildFieldError("profileForm"));
+				return "edit/profile";
+			}
 		}
-		
-		return "edit/profile";
 	}
 
 	@GetMapping(value = "/edit/contacts")
@@ -78,14 +88,12 @@ public class EditProfileController {
 
 	@GetMapping(value = "/edit/skills")
 	public String getEditSkills(Model model) {
-		LOGGER.info("GET SKILLS");
 		model.addAttribute("skillForm", new SkillForm(editProfileService.listSkills(SecurityUtil.getCurrentIdProfile())));
 		return gotoSkillsJSP(model);
 	}
 
 	@PostMapping(value = "/edit/skills")
 	public String saveEditSkills(@Valid @ModelAttribute("skillForm") SkillForm form, BindingResult bindingResult, Model model) {
-		LOGGER.info("POST SKILLS");
 		if(!bindingResult.hasErrors()) {			
 			editProfileService.updateSkills(SecurityUtil.getCurrentIdProfile(), form.getItems());
 		}		
@@ -138,12 +146,16 @@ public class EditProfileController {
 
 	@GetMapping(value = "/edit/courses")
 	public String getEditCourses(Model model) {
+	//	LOGGER.info("Found " + courses.size() + " courses");
 		model.addAttribute("courseForm", new CourseForm(editProfileService.listCourses(SecurityUtil.getCurrentIdProfile())));
 		return gotoCoursesJSP(model);
 	}
 
 	@PostMapping(value = "/edit/courses")
-	public String saveEditCourses(Model model) {
+	public String saveEditCourses(@Valid @ModelAttribute("courseForm") CourseForm courseForm , BindingResult bindingResult, Model model) {
+		if(!bindingResult.hasErrors()) {
+			editProfileService.updateCourses(SecurityUtil.getCurrentIdProfile(), courseForm.getItems());
+		}
 		return gotoCoursesJSP(model);
 	}
 
@@ -226,7 +238,7 @@ public class EditProfileController {
 	}
 
 	@RequestMapping(value = "/my-profile")
-	public String getMyProfile(Model model) {
-		return "redirect:/";
+	public String getMyProfile(@AuthenticationPrincipal CurrentProfile currentProfile) {
+		return "redirect:/" + currentProfile.getUsername();
 	}
 }

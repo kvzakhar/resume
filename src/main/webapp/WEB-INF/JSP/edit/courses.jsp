@@ -33,6 +33,6 @@
 		</form:form>
 	</div>
 </div>
-<script id="ui-block-template" type="text/x-handlebars-template">
+<!-- <script id="ui-block-template" type="text/x-handlebars-template"> 
 	<resume:edit-course-block index="{{blockIndex}}" />
-</script>
+</script> -->

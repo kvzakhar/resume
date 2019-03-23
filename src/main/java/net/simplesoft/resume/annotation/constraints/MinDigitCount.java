@@ -20,7 +20,7 @@ public @interface MinDigitCount {
 
 	int value() default 1;
 	
-	String message() default "MinDigitCount";
+	String message() default "Пароль должен содержать цифры";
 	
 	Class<? extends Payload>[] payload() default { };
 	

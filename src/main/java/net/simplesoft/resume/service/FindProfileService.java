@@ -7,7 +7,7 @@ import net.simplesoft.resume.entity.Profile;
 
 public interface FindProfileService {
 
-	Profile findByUid(String uid);
+	Profile findByUid(String uid);	
 	
 	Page<Profile> findAllProfilesByPage(Pageable page);
 

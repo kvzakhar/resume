@@ -23,6 +23,7 @@ public class EnglishLanguageConstraintValidator implements ConstraintValidator<E
 		if(value == null) {
 			return true;
 		}
+
 		String validationTemplate = getValidationTemplate();
 		for(int i=0;i<value.length();i++){
 			char ch = value.charAt(i);

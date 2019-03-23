@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-//@WebListener
 @Component
 public class ApplicationListener implements ServletContextListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationListener.class);

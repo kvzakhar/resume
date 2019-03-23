@@ -22,7 +22,7 @@ public @interface MinSpecCharCount {
 
 	String specSymbols() default "!@~`#$%^&*()_-+=|\\/{}[].,;:/?";
 
-	String message() default "MinSpecCharCount";
+	String message() default "Пароль должен содержать специальные символы буквы";
 
 	Class<? extends Payload>[] payload() default {};
 

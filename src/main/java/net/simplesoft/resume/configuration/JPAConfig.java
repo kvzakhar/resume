@@ -1,7 +1,5 @@
 package net.simplesoft.resume.configuration;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -44,7 +42,7 @@ public class JPAConfig {
 		return dataSource;
 	}
 	
-	private Properties hibernateProperties() {
+	protected Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
 		properties.put("hibernate.show_sql", true);

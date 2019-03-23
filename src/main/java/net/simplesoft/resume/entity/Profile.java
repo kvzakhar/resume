@@ -3,18 +3,22 @@ package net.simplesoft.resume.entity;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -25,10 +29,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import net.simplesoft.resume.annotation.ProfileDataFieldGroup;
 import net.simplesoft.resume.annotation.constraints.Adulthood;
 import net.simplesoft.resume.annotation.constraints.EnglishLanguage;
 import net.simplesoft.resume.annotation.constraints.Phone;
@@ -46,6 +50,7 @@ public class Profile extends AbstractEntity<Long>{
 	@Column(unique = true, nullable = false)
 	private Long id;
 
+	@ProfileDataFieldGroup
 	@Column(name = "birth_day")
 	@Adulthood
 	private Date birthDay;
@@ -55,6 +60,7 @@ public class Profile extends AbstractEntity<Long>{
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private int versionNum;	
 
+	@ProfileDataFieldGroup
 	@Column
 	@Size(max=100)
 	@NotNull
@@ -62,6 +68,7 @@ public class Profile extends AbstractEntity<Long>{
 	@EnglishLanguage(withNumbers=false, withSpechSymbols=false)
 	private String city;
 
+	@ProfileDataFieldGroup
 	@Column
 	@Size(max=60)
 	@NotNull
@@ -69,12 +76,14 @@ public class Profile extends AbstractEntity<Long>{
 	@EnglishLanguage(withNumbers=false, withSpechSymbols=false)
 	private String country;
 
+	
 	@Column(name = "first_name", nullable = false, length = 50)
 	private String firstName;
 
 	@Column(name = "last_name", nullable = false, length = 50)
 	private String lastName;
 
+	@ProfileDataFieldGroup
 	@Column(length = 2147483647)
 	@NotNull
 	@SafeHtml
@@ -88,11 +97,13 @@ public class Profile extends AbstractEntity<Long>{
 	@Column(name = "small_photo", length = 255)
 	private String smallPhoto;
 
+	@ProfileDataFieldGroup
 	@Size(min = 9, max=20)
 	@Phone
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private String phone;
 
+	@ProfileDataFieldGroup
 	@Column
 	@NotNull
 	@Size(max=100)
@@ -101,9 +112,11 @@ public class Profile extends AbstractEntity<Long>{
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
 	private String email;
 	
+	@ProfileDataFieldGroup
 	@Column
 	private String info;
 
+	@ProfileDataFieldGroup
 	@Column(length = 2147483647)
 	@NotNull
 	@SafeHtml
@@ -127,35 +140,35 @@ public class Profile extends AbstractEntity<Long>{
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Certificate> certificates;
+	private Set<Certificate> certificates;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishYear DESC, beginYear DESC, id DESC")
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Education> educations;
+	private Set<Education> educations;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("name ASC")
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Hobby> hobbies;
+	private Set<Hobby> hobbies;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	//@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Language> languages;
+	private Set<Language> languages;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishDate DESC")
 	//@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Practic> practics;
+	private Set<Practic> practics;
 
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("id ASC")
 //	@JsonIgnore // in this case it relates to elasctic search(do not include field in index)
-	private List<Skill> skills;
+	private Set<Skill> skills;
 	
 	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishDate DESC")
-	private List<Course> courses;
+	private Set<Course> courses;
 	
 	@Embedded
 	private Contacts contacts;
@@ -240,67 +253,68 @@ public class Profile extends AbstractEntity<Long>{
 		this.uid = uid;
 	}
 
-	public List<Certificate> getCertificates() {
+	public Set<Certificate> getCertificates() {
 		return this.certificates;
 	}
 
-	public void setCertificates(List<Certificate> certificates) {
+	public void setCertificates(Set<Certificate> certificates) {
 		this.certificates = certificates;
 	}
 
-	public List<Education> getEducations() {
+	public Set<Education> getEducations() {
 		return this.educations;
 	}
 
-	public void setEducations(List<Education> educations) {
+	public void setEducations(Set<Education> educations) {
 		this.educations = educations;
 	}
 
-	public List<Hobby> getHobbies() {
+	public Set<Hobby> getHobbies() {
 		return this.hobbies;
 	}
 
-	public void setHobbies(List<Hobby> hobbies) {
+	public void setHobbies(Set<Hobby> hobbies) {
 		this.hobbies = hobbies;
 	}
 
-	public List<Language> getLanguages() {
+	public Set<Language> getLanguages() {
 		return this.languages;
 	}
 
-	public void setLanguages(List<Language> languages) {
+	public void setLanguages(Set<Language> languages) {
 		this.languages = languages;
 	}
 
-	public List<Practic> getPractics() {
+	public Set<Practic> getPractics() {
 		return this.practics;
 	}
 
-	public void setPractics(List<Practic> practics) {
+	public void setPractics(Set<Practic> practics) {
 		this.practics = practics;
 	}
 
-	public List<Skill> getSkills() {
+	public Set<Skill> getSkills() {
 		return this.skills;
 	}
 
-	public void setSkills(List<Skill> skills) {
+	public void setSkills(Set<Skill> skills) {
 		this.skills = skills;
 		updateListSetProfile(this.skills);		
 	}
 
-	private void updateListSetProfile(List<? extends ProfileEntity> list) {
+	private void updateListSetProfile(Set<? extends ProfileEntity> list) {
 		if(list != null) {
 			list.forEach(s->{s.setProfile(this);});
 		}
 	}
 
-	public List<Course> getCourses() {
+	public Set<Course> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<Course> courses) {
+	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
+		updateListSetProfile(this.courses);
 	}
 
 	public String getLargePhoto() {

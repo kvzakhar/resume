@@ -76,22 +76,22 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(getFinishDate(), id, name, school);
+		return Objects.hash(getFinishDate(), name, school);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if(obj == null)
 			return false;
 		if (!(obj instanceof Course))
 			return false;
-		Course other = (Course) obj;
-		return Objects.equals(getFinishDate(), other.getFinishDate()) 
-				&& Objects.equals(id,  other.id) 
-				&& Objects.equals(name, other.name)
-				&& Objects.equals(school, other.school);
+		Course other = (Course) obj;		
+		
+		return Objects.equals(getFinishDate(), other.getFinishDate()) && 
+				Objects.equals(getFinishDate(), other.getFinishDate()) &&
+				Objects.equals(getFinishDate(), other.getFinishDate());
 	}
 
 }

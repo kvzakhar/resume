@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="resume" tagdir="/WEB-INF/tags"%>
 
-<%@ attribute name="certificates" required="true" type="java.util.List" %>
+<%@ attribute name="certificates" required="true" type="java.util.Set" %>
 <%@ attribute name="showEdit"  required="false" type="java.lang.Boolean" %>
 
 <div class="panel panel-primary certificates">

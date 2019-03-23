@@ -17,7 +17,7 @@ import net.simplesoft.resume.validator.FieldMatchConstraintValidator;
 @Constraint(validatedBy = {FieldMatchConstraintValidator.class})
 @Documented
 public @interface FieldMatch {
-	String message() default "FieldMatch";
+	String message() default "Пароли должны совпадать!";
 
 	Class<?>[] groups() default {};
 

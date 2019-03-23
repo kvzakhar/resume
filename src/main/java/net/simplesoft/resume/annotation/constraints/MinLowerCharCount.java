@@ -20,7 +20,7 @@ public @interface MinLowerCharCount {
 
 	int value() default 1;
 	
-	String message() default "MinLowerCharCount";
+	String message() default "Пароль должен содержать прописные буквы";
 	
 	Class<? extends Payload>[] payload() default { };
 	

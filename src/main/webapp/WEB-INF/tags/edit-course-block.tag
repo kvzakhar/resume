@@ -17,23 +17,22 @@
 			</div>
 		</div>
 		<div class="row">
+			
 			<c:if test="${course != null }"><resume:form-has-error path="items[${index }].name"/></c:if>
 			<div class="col-xs-6 col-md-4 form-group ${hasError ? 'has-error has-feedback' : ''}">
 				<label class="control-label" for="items${index }name">Название курса*</label> 
 				<input class="form-control" name="items[${index }].name" id="items${index }name" 
 										placeholder="Example: Java Advanced" value="${course.name }" required="required">
-				<c:if test="${course != null }">
-				<resume:form-error path="items[${index }].name" />
-				</c:if>
+					<resume:form-error path="items[${index }].name" />
+
 			</div>
 			<c:if test="${course != null }"><resume:form-has-error path="items[${index }].school"/></c:if>
 			<div class="col-xs-6 col-md-4 form-group ${hasError ? 'has-error has-feedback' : ''}">
 				<label class="control-label" for="items${index }school">Название школы / площадки*</label> 
 				<input class="form-control" name="items[${index }].school" id="items${index }.school" 
 										placeholder="Example: SourceIt" value="${course.school }" required="required">
-				<c:if test="${course != null }">
 				<resume:form-error path="items[${index }].school" />
-				</c:if>
+
 			</div>
 			<div class="col-xs-12 col-md-4 form-group">
 				<label for="items${index }finishDate">Дата окончания</label> 

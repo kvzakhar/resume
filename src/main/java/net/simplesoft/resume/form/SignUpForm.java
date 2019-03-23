@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import net.simplesoft.resume.annotation.EnableFormErrorConversion;
 import net.simplesoft.resume.annotation.constraints.EnglishLanguage;
 import net.simplesoft.resume.annotation.constraints.FieldMatch;
 import net.simplesoft.resume.annotation.constraints.PasswordStrength;
 
-@FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match")
+@FieldMatch(first = "password", second = "confirmPassword")
+@EnableFormErrorConversion(formName="passwordForm", fieldReference="confirmPassword", validationAnnotationClass=FieldMatch.class)
 public class SignUpForm  implements Serializable{
 
 	private static final long serialVersionUID = -499113161404192508L;

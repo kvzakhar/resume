@@ -20,7 +20,11 @@ public class ResumeFilter extends AbstractFilter {
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 		String requestUrl = request.getRequestURI();
 		request.setAttribute("REQUEST_URL", requestUrl);
+		LOGGER.info(requestUrl + " " + System.currentTimeMillis());
 		try {
+			if(requestUrl.contains("favicon")) {
+				return;
+			}
 			chain.doFilter(request, response);
 		} catch (Throwable t) {
 			LOGGER.error("Process request failed: " + requestUrl, t);

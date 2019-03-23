@@ -1,7 +1,9 @@
 package net.simplesoft.resume.form;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -9,22 +11,22 @@ import net.simplesoft.resume.entity.Education;
 
 public class EducationForm {
 	@Valid
-	private List<Education> items = new ArrayList<>();
+	private Set<Education> items = new HashSet();
 	
 	public EducationForm() {
 		super();
 	}
 
-	public EducationForm(List<Education> items) {
+	public EducationForm(Set<Education> items) {
 		super();
 		this.items = items;
 	}
 
-	public List<Education> getItems() {
+	public Set<Education> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Education> items) {
+	public void setItems(Set<Education> items) {
 		this.items = items;
 	}
 }

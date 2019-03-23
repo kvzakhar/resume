@@ -20,7 +20,7 @@ public @interface MinUpperCharCount {
 
 	int value() default 1;
 	
-	String message() default "MinUpperCharCount";
+	String message() default "Пароль должен содержать заглавные буквы";
 	
 	Class<? extends Payload>[] payload() default { };
 	
